@@ -1,2 +1,2 @@
 # mypythonlearn
-Git reposityory for my python and git experiments!
+Git repository for my python and git experiments!
