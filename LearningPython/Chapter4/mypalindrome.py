@@ -27,4 +27,10 @@ for test in testcases:
     else:
         print '%s is not a Palindrome' % test
 
-
+results = map(palindrome2, testcases)
+for i in range(len(testcases)):
+    if results[i] == True:
+        print '%s is a Palindrome' % testcases[i]
+    else:
+        print '%s is not a Palindrome' % testcases[i]
+    
