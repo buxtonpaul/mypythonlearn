@@ -1,5 +1,6 @@
-
-
+"""
+Some information
+"""
 
 
 def palindrome1(source):
@@ -14,23 +15,22 @@ def palindrome2(source):
     """
     Function to return is a string is a palidrome using list reversal
     """
-    seperated = list(source) # seperate the string to a list
+    seperated = list(source)  # seperate the string to a list
     seperated.reverse()     # reverse the list
-    revstring = ''.join(seperated)   #convert to a string again
-    return  revstring == source
+    revstring = ''.join(seperated)  # convert to a string again
+    return revstring == source
 
-testcases = ['abba', 'level', '101', 'fish', 'cheese']
+TESTCASES = ['abba', 'level', '101', 'fish', 'cheese']
 
-for test in testcases:
+for test in TESTCASES:
     if palindrome1(test) == True:
         print '%s is a Palindrome' % test
     else:
         print '%s is not a Palindrome' % test
 
-results = map(palindrome2, testcases)
-for i in range(len(testcases)):
-    if results[i] == True:
-        print '%s is a Palindrome' % testcases[i]
+RESULTS = map(palindrome2, TESTCASES)
+for i in range(len(TESTCASES)):
+    if RESULTS[i] == True:
+        print '%s is a Palindrome' % TESTCASES[i]
     else:
-        print '%s is not a Palindrome' % testcases[i]
-    
+        print '%s is not a Palindrome' % TESTCASES[i]
