@@ -13,7 +13,7 @@ def palindrome1(source):
 
 def palindrome2(source):
     """
-    Function to return is a string is a palidrome using list reversal
+    Function to return if a string is a palidrome using list reversal
     """
     seperated = list(source)  # seperate the string to a list
     seperated.reverse()     # reverse the list
