@@ -1,0 +1,3 @@
+[submodule "DAT210x"]
+	path = DAT210x
+	url = https://github.com/authman/DAT210x.git
