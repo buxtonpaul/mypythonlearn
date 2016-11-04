@@ -39,7 +39,7 @@ rankings=rankings.drop(labels=['RK'],axis=1)
 # it. By the way, don't store the original index
 #
 # .. your code here ..
-ranakings=rankings.reset_index(drop=True)
+rankings=rankings.reset_index(drop=True)
 
 
 # TODO: Check the data type of all columns, and ensure those
@@ -61,3 +61,7 @@ rankings.loc[:,'SHA']=pd.to_numeric(rankings.loc[:,'SHA'],errors='coerce')
 # TODO: Your dataframe is now ready! Use the appropriate 
 # commands to answer the questions on the course lab page.
 print(rankings)
+
+print 'Entries = %d' % len(rankings.index)
+
+print 'Unique PCT %d ' % len(rankings.PCT.unique())
