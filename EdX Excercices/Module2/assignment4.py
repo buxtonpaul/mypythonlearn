@@ -39,7 +39,7 @@ rankings=rankings.drop(labels=['RK'],axis=1)
 # it. By the way, don't store the original index
 #
 # .. your code here ..
-rankings.reset_index(drop=True)
+ranakings=rankings.reset_index(drop=True)
 
 
 # TODO: Check the data type of all columns, and ensure those
