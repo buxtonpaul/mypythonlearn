@@ -45,6 +45,7 @@ rankings=rankings.reset_index(drop=True)
 # TODO: Check the data type of all columns, and ensure those
 # that should be numeric are numeric
 
+rankings.loc[:,'GP']=pd.to_numeric(rankings.loc[:,'GP'],errors='coerce')
 rankings.loc[:,'G']=pd.to_numeric(rankings.loc[:,'G'],errors='coerce')
 rankings.loc[:,'A']=pd.to_numeric(rankings.loc[:,'A'],errors='coerce')
 rankings.loc[:,'PTS']=pd.to_numeric(rankings.loc[:,'PTS'],errors='coerce')
@@ -65,3 +66,4 @@ print(rankings)
 print 'Entries = %d' % len(rankings.index)
 
 print 'Unique PCT %d ' % len(rankings.PCT.unique())
+print 'Sum of GP for entries 15 and 16 %d' % sum(rankings.loc[15:16,'GP'])
