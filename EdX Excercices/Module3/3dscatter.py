@@ -21,5 +21,5 @@ ax.set_xlabel('Final Grade')
 ax.set_ylabel('First Grade')
 ax.set_zlabel('Daily Alcohol')
 
-ax.scatter(student_dataset.G1, student_dataset.G3, student_dataset['Dalc'], c='r', marker='.',figsize=(2,2))
+ax.scatter(student_dataset.G1, student_dataset.G3, student_dataset['Dalc'], c='r', marker='.'
 plt.show()
