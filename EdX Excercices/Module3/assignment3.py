@@ -24,7 +24,16 @@ fig = plt.figure()
 # axes
 # 
 # .. your code here ..
+seeds=pd.read_csv('Datasets/wheat.data')
 
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlabel('Area')
+ax.set_ylabel('Perimeter')
+ax.set_zlabel('Asymmetry')
+
+ax.scatter(seeds.area, seeds.perimeter, seeds.asymmetry, c='red', marker='.')
 
 fig = plt.figure()
 #
@@ -35,6 +44,13 @@ fig = plt.figure()
 # axes
 # 
 # .. your code here ..
+
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlabel('Width')
+ax.set_ylabel('Groove')
+ax.set_zlabel('Length')
+
+ax.scatter(seeds.width, seeds.groove, seeds.length, c='green', marker='.')
 
 
 plt.show()
