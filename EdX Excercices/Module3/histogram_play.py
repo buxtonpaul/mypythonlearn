@@ -14,8 +14,9 @@ my_series=student_dataset.G3
 my_dataframe=student_dataset[['G3','G2','G1']]
 my_series
 my_dataframe
-my_series.plot.hist(alpha=0.5)
-my_dataframe.plot.hist(alpha=0.5)
+my_series.plot.hist(alpha=0.5,figsize=(8,8))
+my_dataframe.plot.hist(alpha=0.5,figsize=(8,8))
 
 # Normalise data to produce probabilites
-my_dataframe.plot.hist(alpha=0.5,normed=True)
+my_dataframe.plot.hist(alpha=0.5,normed=True,figsize=(8,8))
+
