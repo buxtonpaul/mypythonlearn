@@ -11,7 +11,7 @@ matplotlib.style.use('ggplot')
 # It's located at 'Datasets/wheat.data'
 # 
 # .. your code here ..
-
+seeds=pd.read_csv('Datasets/wheat.data')
 
 #
 # TODO: Create a 2d scatter plot that graphs the
@@ -19,12 +19,15 @@ matplotlib.style.use('ggplot')
 # 
 # .. your code here ..
 
-
+s1=seeds[['area','perimeter']]
+s1.plot.scatter('area','perimeter')
 #
 # TODO: Create a 2d scatter plot that graphs the
 # groove and asymmetry features
 # 
 # .. your code here ..
+s2=seeds[['groove','asymmetry']]
+s2.plot.scatter('groove','asymmetry',marker='.')
 
 
 #
@@ -32,6 +35,8 @@ matplotlib.style.use('ggplot')
 # compactness and width features
 # 
 # .. your code here ..
+s3=seeds[['compactness','width']]
+s3.plot.scatter('compactness','width',marker='^')
 
 
 
@@ -43,5 +48,4 @@ matplotlib.style.use('ggplot')
 
 
 plt.show()
-
 
