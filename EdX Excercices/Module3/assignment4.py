@@ -8,20 +8,13 @@ from pandas.tools.plotting import parallel_coordinates
 matplotlib.style.use('ggplot')
 
 
-#
-# TODO: Load up the Seeds Dataset into a Dataframe
-# It's located at 'Datasets/wheat.data'
-# 
-# .. your code here ..
+seeds = pd.read_csv("Datasets/wheat.data", index_col=0)
 
 
 
-#
-# TODO: Drop the 'id', 'area', and 'perimeter' feature
-# 
-# .. your code here ..
 
 
+seeds=seeds.drop(labels=['area','perimeter'],axis=1)
 
 #
 # TODO: Plot a parallel coordinates chart grouped by
@@ -30,7 +23,8 @@ matplotlib.style.use('ggplot')
 # 
 # .. your code here ..
 
-
+plt.figure(dpi=267)
+parallel_coordinates(seeds, 'wheat_type',alpha=4)
 
 plt.show()
 
