@@ -32,7 +32,7 @@ plt.yticks(tick_marks, seeds.columns)
 # TODO: Graph the correlation matrix using imshow or matshow
 # 
 # .. your code here ..
-
+print(seeds.corr())
 
 plt.show()
 
