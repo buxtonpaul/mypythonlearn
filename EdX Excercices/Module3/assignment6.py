@@ -22,7 +22,7 @@ seeds = pd.read_csv("Datasets/wheat.data", index_col=0)
 # 
 # .. your code here ..
 
-plt.imshow(seeds.corr(), cmap=plt.cm.Blues, interpolation='nearest',dpi=267)
+plt.imshow(seeds.corr(), cmap=plt.cm.Blues, interpolation='nearest')
 plt.colorbar()
 tick_marks = [i for i in range(len(seeds.columns))]
 plt.xticks(tick_marks, seeds.columns, rotation='vertical')
