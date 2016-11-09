@@ -15,7 +15,7 @@ matplotlib.style.use('ggplot') # Look Pretty
 
 student_dataset = pd.read_csv("Datasets/students.data", index_col=0)
 
-fig = plt.figure()
+fig = plt.figure(dpi=267)
 ax = fig.add_subplot(111, projection='3d')
 ax.set_xlabel('Final Grade')
 ax.set_ylabel('First Grade')
