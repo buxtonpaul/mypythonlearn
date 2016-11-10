@@ -82,6 +82,18 @@ ax.set_zlabel('Z')
 ax.scatter(armadillo.x, armadillo.y, armadillo.z, c='green', marker='.', alpha=0.75)
 
 
+# Time the execution of rPCA 5000x
+t1 = datetime.datetime.now()
+for i in range(5000): rpca = do_RandomizedPCA(armadillo)
+time_delta = datetime.datetime.now() - t1
+
+# Render the newly transformed RandomizedPCA armadillo!
+if not rpca is None:
+  fig = plt.figure()
+  ax = fig.add_subplot(111)
+  ax.set_title('RandomizedPCA, build time: ' + str(time_delta))
+  ax.scatter(rpca[:,0], rpca[:,1], c='red', marker='.', alpha=0.75)
+
 
 # Time the execution of PCA 5000x
 t1 = datetime.datetime.now()
@@ -97,17 +109,6 @@ if not pca is None:
 
 
 
-# Time the execution of rPCA 5000x
-t1 = datetime.datetime.now()
-for i in range(5000): rpca = do_RandomizedPCA(armadillo)
-time_delta = datetime.datetime.now() - t1
-
-# Render the newly transformed RandomizedPCA armadillo!
-if not rpca is None:
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  ax.set_title('RandomizedPCA, build time: ' + str(time_delta))
-  ax.scatter(rpca[:,0], rpca[:,1], c='red', marker='.', alpha=0.75)
 
 
 plt.show()
