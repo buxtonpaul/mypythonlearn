@@ -2,13 +2,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 import assignment2_helper as helper
+import numpy as np
+from sklearn.decomposition import PCA
 
 # Look pretty...
 matplotlib.style.use('ggplot')
 
 
 # Do * NOT * alter this line, until instructed!
-scaleFeatures = False
+scaleFeatures = True
 
 
 # TODO: Load up the dataset and remove any and all
@@ -21,21 +23,19 @@ kidneys=pd.read_csv('Datasets/kidney_disease.csv')
 kidneys=kidneys.dropna(axis=0)
 kidneys=kidneys.reset_index()
 
-newkids=kidneys[['bgr','wc','rc']]
+
 # call the pd.to_numeric function on all the values in columd=s rc and wc
-newkids=newkids[['rc','wc']].apply(pd.to_numeric,errors='coerce')
 
 # Create some color coded labels; the actual label feature
 # will be removed prior to executing PCA, since it's unsupervised.
 # You're only labeling by color so you can see the effects of PCA
-labels = ['red' if i=='ckd' else 'green' for i in df.classification]
+labels = ['red' if i=='ckd' else 'green' for i in kidneys.classification]
 
 
-# TODO: Use an indexer to select only the following columns:
-#       ['bgr','wc','rc']
-#
-# .. your code here ..
+df=kidneys[['bgr','wc','rc']]
+df=df[['bgr','rc','wc']].apply(pd.to_numeric,errors='coerce')
 
+print df.dtypes
 
 
 # TODO: Print out and check your dataframe's dtypes. You'll probably
@@ -63,7 +63,8 @@ labels = ['red' if i=='ckd' else 'green' for i in df.classification]
 # you probably didn't complete the previous step properly.
 #
 # .. your code here ..
-
+df.describe()
+print df.var(axis=0)
 
 
 # TODO: This method assumes your dataframe is called df. If it isn't,
@@ -73,6 +74,10 @@ labels = ['red' if i=='ckd' else 'green' for i in df.classification]
 # .. your code adjustment here ..
 if scaleFeatures: df = helper.scaleFeatures(df)
 
+pca=PCA(n_components=2)
+pca.fit(df)
+      
+T=pca.transform(df)
 
 
 # TODO: Run PCA on your dataset and reduce it to 2 components
@@ -94,6 +99,8 @@ if scaleFeatures: df = helper.scaleFeatures(df)
 # are in P.C. space, so we'll just define the coordinates accordingly:
 ax = helper.drawVectors(T, pca.components_, df.columns.values, plt, scaleFeatures)
 T = pd.DataFrame(T)
+#T.head()
+#T.describe()
 T.columns = ['component1', 'component2']
 T.plot.scatter(x='component1', y='component2', marker='o', c=labels, alpha=0.75, ax=ax)
 plt.show()
