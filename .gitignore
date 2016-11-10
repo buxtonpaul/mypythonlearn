@@ -29,6 +29,10 @@
 *.sqlite
 *.ipynb_checkpoints
 
+# IDE generated files #
+#######################
+launch.json
+
 # OS generated files #
 ######################
 .DS_Store

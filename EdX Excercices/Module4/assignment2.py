@@ -17,7 +17,13 @@ scaleFeatures = False
 #
 # .. your code here ..
 
+kidneys=pd.read_csv('Datasets/kidney_disease.csv')
+kidneys=kidneys.dropna(axis=0)
+kidneys=kidneys.reset_index()
 
+newkids=kidneys[['bgr','wc','rc']]
+# call the pd.to_numeric function on all the values in columd=s rc and wc
+newkids=newkids[['rc','wc']].apply(pd.to_numeric,errors='coerce')
 
 # Create some color coded labels; the actual label feature
 # will be removed prior to executing PCA, since it's unsupervised.
