@@ -16,7 +16,9 @@ def showandtell(title=None):
 #
 # INFO: This dataset has call records for 10 users tracked over the course of 3 years.
 # Your job is to find out where the users likely live and work at!
-
+cdr_df=pd.read_csv("Datasets/CDR.csv")
+cdr_df.head()
+cdr_df.dtypes
 
 #
 # TODO: Load up the dataset and take a peek at its head
@@ -24,6 +26,14 @@ def showandtell(title=None):
 #
 # .. your code here ..
 
+cdr_df.CallDate=pd.to_datetime(cdr_df.CallDate)
+cdr_df.dtypes
+cdr_df.head()
+pd.to_timedelta?
+cdr_df.CallTime=pd.to_timedelta(cdr_df.CallTime)
+cdr_df.dtypes
+cdr_df.head()
+cdr_df.Duration=pd.to_timedelta(cdr_df.Duration)
 
 #
 # TODO: Get a distinct list of "In" phone numbers (users) and store the values in a
@@ -31,6 +41,7 @@ def showandtell(title=None):
 # Hint: https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tolist.html
 #
 # .. your code here ..
+list=cdr_df.In.unique().tolist()
 
 
 # 
@@ -39,9 +50,22 @@ def showandtell(title=None):
 #
 # .. your code here ..
 
+user1=cdr_df[cdr_df.In==list[0]]
 
 # INFO: Plot all the call locations
 user1.plot.scatter(x='TowerLon', y='TowerLat', c='gray', alpha=0.1, title='Call Locations')
+
+#toto use gmplot to sdee on map!
+import gmplot
+
+gmap = gmplot.GoogleMapPlotter(user1.TowerLat.mean(), user1.TowerLon.mean(), 16)
+
+gmap.scatter(more_lats, more_lngs, '#3B0B39', size=40, marker=False)
+gmap.scatter(user1.TowerLat.tolist(), user1.TowerLon.tolist(), 'k', marker=True)
+
+
+gmap.draw("mymap.html")
+
 showandtell()  # Comment this line out when you're ready to proceed
 
 
