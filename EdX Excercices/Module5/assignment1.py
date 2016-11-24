@@ -6,7 +6,8 @@
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib
 import matplotlib.pyplot as plt
-#from sklearn.clustering import 
+from sklearn.cluster import KMeans
+from datetime import date,time
 
 matplotlib.style.use('ggplot') # Look Pretty
 
@@ -26,7 +27,7 @@ def doKMeans(df):
   #
   # INFO: Plot your data with a '.' marker, with 0.3 alpha at the Longitude,
   # and Latitude locations in your dataset. Longitude = x, Latitude = y
-  fig = plt.figure()
+  fig = plt.figure(dpi=200)
   ax = fig.add_subplot(111)
   ax.scatter(df.Longitude, df.Latitude, marker='.', alpha=0.3)
 
@@ -35,17 +36,19 @@ def doKMeans(df):
   # since the remaining columns aren't really applicable for this purpose.
   #
   # .. your code here ..
-  dfnew=df[['Latitude','Longitude']]
+  newdf=df[['Longitude','Latitude']]
+  print(newdf)
   #
   # TODO: Use K-Means to try and find seven cluster centers in this df.
   #
   # .. your code here ..
-
+  kmeans_model=KMeans(n_clusters=7)
+  kmeans_model.fit(newdf)
   #
   # INFO: Print and plot the centroids...
-#  centroids = kmeans_model.cluster_centers_
-#  ax.scatter(centroids[:,0], centroids[:,1], marker='x', c='red', alpha=0.5, linewidths=3, s=169)
- # print centroids
+  centroids = kmeans_model.cluster_centers_
+  ax.scatter(centroids[:,0], centroids[:,1], marker='x', c='red', alpha=0.5, linewidths=3, s=169)
+  print centroids
 
 
 
@@ -63,8 +66,8 @@ df=pd.read_csv('Datasets/Crimes_-_2001_to_present.csv')
 # TODO: Drop any ROWs with nans in them
 #
 # .. your code here ..
-df=df.dropna()
-
+df=df.dropna(axis=0)
+df=df.reset_index()
 #
 # TODO: Print out the dtypes of your dset
 #
@@ -77,7 +80,7 @@ print (df.dtypes)
 #
 # .. your code here ..
 df.loc[:,'Date']=pd.to_datetime(df.loc[:,'Date'],errors='coerce')
-
+print (df.dtypes)
 # INFO: Print & Plot your data
 doKMeans(df)
 
@@ -90,9 +93,10 @@ doKMeans(df)
 # .. your code here ..
 
 
+df=df[df.Date>date(2011,1,1)]
 
 # INFO: Print & Plot your data
-#doKMeans(df)
+doKMeans(df)
 plt.show()
 
 
