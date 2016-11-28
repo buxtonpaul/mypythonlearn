@@ -50,6 +50,15 @@ def doKMeans(df):
   ax.scatter(centroids[:,0], centroids[:,1], marker='x', c='red', alpha=0.5, linewidths=3, s=169)
   print centroids
 
+  import gmplot
+
+#  gmap = gmplot.GoogleMapPlotter(df.Latitude.mean(), df.Longitude.mean(), 10)
+  gmap = gmplot.GoogleMapPlotter(df.Latitude.mean(), df.Longitude.mean(), 10)
+
+  
+  gmap.scatter(df.Latitude.tolist(), df.Longitude.tolist(), 'r', marker=False,size=100)
+  gmap.scatter(centroids[:,1],centroids[:,0], c='k', marker=False,size=400)
+  gmap.draw("chicago.html")
 
 
 #

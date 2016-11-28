@@ -2,6 +2,10 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 import matplotlib
+from sklearn.cluster import KMeans
+from datetime import date,time
+import gmplot
+
 
 matplotlib.style.use('ggplot') # Look Pretty
 
@@ -27,12 +31,7 @@ cdr_df.dtypes
 # .. your code here ..
 
 cdr_df.CallDate=pd.to_datetime(cdr_df.CallDate)
-cdr_df.dtypes
-cdr_df.head()
-pd.to_timedelta?
 cdr_df.CallTime=pd.to_timedelta(cdr_df.CallTime)
-cdr_df.dtypes
-cdr_df.head()
 cdr_df.Duration=pd.to_timedelta(cdr_df.Duration)
 
 #
@@ -50,23 +49,26 @@ list=cdr_df.In.unique().tolist()
 #
 # .. your code here ..
 
+
+
+
 user1=cdr_df[cdr_df.In==list[0]]
 
 # INFO: Plot all the call locations
 user1.plot.scatter(x='TowerLon', y='TowerLat', c='gray', alpha=0.1, title='Call Locations')
 
 #toto use gmplot to sdee on map!
-import gmplot
 
-gmap = gmplot.GoogleMapPlotter(user1.TowerLat.mean(), user1.TowerLon.mean(), 16)
+gmap = gmplot.GoogleMapPlotter(user1.TowerLat.mean(), user1.TowerLon.mean(), 10)
 
-gmap.scatter(more_lats, more_lngs, '#3B0B39', size=40, marker=False)
-gmap.scatter(user1.TowerLat.tolist(), user1.TowerLon.tolist(), 'k', marker=True)
+#gmap.scatter(more_lats, more_lngs, '#3B0B39', size=40, marker=False)
+gmap.scatter(user1.TowerLat.tolist(), user1.TowerLon.tolist(), 'r', marker=False)
+#gmap.heatmap(user1.TowerLat.tolist(), user1.TowerLon.tolist())
 
 
-gmap.draw("mymap.html")
+print list
 
-showandtell()  # Comment this line out when you're ready to proceed
+#showandtell()  # Comment this line out when you're ready to proceed
 
 
 #
@@ -85,13 +87,12 @@ showandtell()  # Comment this line out when you're ready to proceed
 #   2. They probably are at home in the early morning and during the late night
 #   3. They probably spend time commuting between work and home everyday
 
-
-
 #
 # TODO: Add more filters to the user1 slice you created. Add bitwise logic so that you're
 # only examining records that came in on weekends (sat/sun).
 #
 # .. your code here ..
+user1=user1[(user1.DOW=='Sat') | (user1.DOW=='Sun')]
 
 
 #
@@ -103,6 +104,9 @@ showandtell()  # Comment this line out when you're ready to proceed
 # slice, print out its length:
 #
 # .. your code here ..
+
+user1=user1[(user1.CallTime<datetime.timedelta(hours=6)) | (user1.CallTime>=datetime.timedelta(hours=22))]
+
 
 
 #
@@ -117,10 +121,14 @@ showandtell()  # Comment this line out when you're ready to proceed
 # caller's residence:
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.scatter(user1.TowerLon,user1.TowerLat, c='g', marker='o', alpha=0.2)
+ax.scatter(user1.TowerLon.tolist(),user1.TowerLat.tolist(), c='g', marker='o', alpha=0.2)
 ax.set_title('Weekend Calls (<6am or >10p)')
-showandtell()  # TODO: Comment this line out when you're ready to proceed
+#showandtell()  # TODO: Comment this line out when you're ready to proceed
 
+# note that gmap uses lat followed by long
+gmap.scatter(user1.TowerLat.tolist(), user1.TowerLon.tolist(), 'k', marker=False,size=400)
+
+gmap.draw("mymap.html")
 
 
 #
@@ -140,13 +148,76 @@ showandtell()  # TODO: Comment this line out when you're ready to proceed
 # .. your code here ..
 
 
-showandtell()  # TODO: Comment this line out when you're ready to proceed
+#showandtell()  # TODO: Comment this line out when you're ready to proceed
+newdf=user1[['TowerLat','TowerLon']]
+#print(newdf)
+  #
+  # TODO: Use K-Means to try and find seven cluster centers in this df.
+  #
+  # .. your code here ..
+kmeans_model=KMeans(n_clusters=1)
+kmeans_model.fit(newdf)
+ #
+  # INFO: Print and plot the centroids...
+centroids = kmeans_model.cluster_centers_
+ax.scatter(centroids[:,0], centroids[:,1], marker='x', c='red', alpha=0.5, linewidths=3, s=169)
+#print centroids
 
+#  gmap = gmplot.GoogleMapPlotter(df.Latitude.mean(), df.Longitude.mean(), 10)
+gmap = gmplot.GoogleMapPlotter(newdf.TowerLat.mean(), newdf.TowerLon.mean(), 10)
 
+  
+#gmap.scatter(newdf.TowerLat.tolist(), newdf.TowerLon.tolist(), 'r', marker=False,size=100)
+gmap.scatter(centroids[:,0],centroids[:,1], 'r', marker=False,size=400)
+gmap.draw("Marker.html")
 
 #
 # TODO: Repeat the above steps for all 10 individuals, being sure to record their approximate home
 # locations. You might want to use a for-loop, unless you enjoy typing.
 #
 # .. your code here ..
+
+
+for user in list:
+    
+    userdata=cdr_df[cdr_df.In==user]
+
+    # INFO: Plot all the call locations
+    plottitle='Call locations for user {0}'.format(user)
+#    userdata.plot.scatter(x='TowerLon', y='TowerLat', c='gray', alpha=0.1, title=plottitle)
+    
+    #toto use gmplot to sdee on map!
+
+#    gmap = gmplot.GoogleMapPlotter(userdata.TowerLat.mean(), userdata.TowerLon.mean(), 10)
+
+#    gmap.scatter(userdata.TowerLat.tolist(), userdata.TowerLon.tolist(), 'r', marker=False)
+    userdata=userdata[(userdata.DOW=='Sat') | (userdata.DOW=='Sun')]
+    userdata=userdata[(userdata.CallTime<datetime.timedelta(hours=6)) | (userdata.CallTime>=datetime.timedelta(hours=22))]
+    
+    #fig = plt.figure()
+    #ax = fig.add_subplot(111)
+    #ax.scatter(user1.TowerLon.tolist(),user1.TowerLat.tolist(), c='g', marker='o', alpha=0.2)
+    #ax.set_title('Weekend Calls (<6am or >10p)')
+
+#    gmap.scatter(userdata.TowerLat.tolist(), userdata.TowerLon.tolist(), 'k', marker=False,size=400)
+    #gmap.draw("mymap.html")
+
+
+    newdf=userdata[['TowerLat','TowerLon']]
+    #print(newdf)
+    kmeans_model=KMeans(n_clusters=1)
+    kmeans_model.fit(newdf)
+    
+      # INFO: Print and plot the centroids...
+    centroids = kmeans_model.cluster_centers_
+    ax.scatter(centroids[:,0], centroids[:,1], marker='x', c='red', alpha=0.5, linewidths=3, s=169)
+
+    #  gmap = gmplot.GoogleMapPlotter(df.Latitude.mean(), df.Longitude.mean(), 10)
+    gmap = gmplot.GoogleMapPlotter(newdf.TowerLat.mean(), newdf.TowerLon.mean(), 10)
+
+  
+    #gmap.scatter(newdf.TowerLat.tolist(), newdf.TowerLon.tolist(), 'r', marker=False,size=100)
+    gmap.scatter(centroids[:,0],centroids[:,1], 'r', marker=False,size=400)
+    htmltitle='user_{0}.html'.format(user)
+    gmap.draw(htmltitle)
 
