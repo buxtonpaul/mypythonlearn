@@ -44,10 +44,10 @@ for track in gpx.tracks:
         longs=[x.longitude for x in segment.points]
         n=0
         
-        prev_pos=coords[0]
+        prev_pos=(lats[0],longs[0])
         prev_time=times[0]
         for x in segment.points:
-            delta_distance.append(haversine(prev_pos,coords[n]))
+            delta_distance.append(haversine(prev_pos,(lats[n],longs[n])))
             # possibly want to add eleveations....
             delta_time.append((times[n]-prev_time).total_seconds())
             
@@ -64,7 +64,7 @@ for track in gpx.tracks:
             else:
                 mpm.append(1/(speed[n]*0.03728227153424))
 
-            prev_pos=coords[n]
+            prev_pos=(lats[n],longs[n])
             prev_time=times[n]
             n=n+1
             
@@ -83,18 +83,20 @@ figure()
 plot(cum_time, mpm, 'r')
 xlabel('Time in s')
 ylabel('pace in mins per mile')
+yticks([4,5,6,7,8,9,10,11,12,13,14,15])
 title('Pace in M/Mile')
+ylim([0,15])
 show()
 
 
 
-figure()
+#figure()
 
-plot(cum_time, speed, 'r')
-xlabel('Time in s')
-ylabel('Speed in m/s')
-title('Speed in M/s')
-show()
+#plot(cum_time, speed, 'r')
+#xlabel('Time in s')
+#ylabel('Speed in m/s')
+#title('Speed in M/s')
+#show()
 
 
 
