@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
+from sklearn.model_selection import train_test_split
 
 matplotlib.style.use('ggplot') # Look Pretty
 
@@ -54,7 +55,15 @@ def plotDecisionBoundary(model, X, y):
 # .. your code here ..
 
 
-
+X=pd.read_csv("Datasets/wheat.data")
+X.head()
+y=X.wheat_type
+X=X.drop(labels=['wheat_type'],axis=1)
+X.head()
+y
+wheats=y.unique().tolist()
+yord=[wheats.index(a) for a in y]
+      
 #
 # TODO: Copy the 'wheat_type' series slice out of X, and into a series
 # called 'y'. Then drop the original 'wheat_type' column from the X
@@ -75,7 +84,10 @@ def plotDecisionBoundary(model, X, y):
 #
 # .. your code here ..
 
-
+# The description already has the mean for these, so lets use that.
+# 
+description=X.describe()
+X.fillna(description.ix['mean',:],axis=0,inplace=True)
 
 #
 # TODO: Split X into training and testing data sets using train_test_split().
@@ -84,7 +96,7 @@ def plotDecisionBoundary(model, X, y):
 # specify a random_state.
 #
 # .. your code here ..
-
+data_train, data_test, label_train, label_test = train_test_split(X,y,test_size=0.333,random_state=1)
 
 
 # 
