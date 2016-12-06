@@ -46,6 +46,14 @@ def plotDecisionBoundary(model, X, y):
   plt.axis('tight')
   plt.title('K = ' + str(p['n_neighbors']))
 
+def doPCA(data, dimensions=2):
+    from sklearn.decomposition import PCA
+    model = PCA(n_components=dimensions)
+    model.fit(data)
+    return model
+
+  
+  
 
 # 
 # TODO: Load up the dataset into a variable called X. Check the .head and
@@ -70,7 +78,7 @@ yord=[wheats.index(a) for a in y]
 #
 # .. your code here ..
 
-
+y=yord
 
 # TODO: Do a quick, "ordinal" conversion of 'y'. In actuality our
 # classification isn't ordinal, but just as an experiment...
@@ -96,7 +104,7 @@ X.fillna(description.ix['mean',:],axis=0,inplace=True)
 # specify a random_state.
 #
 # .. your code here ..
-data_train, data_test, label_train, label_test = train_test_split(X,y,test_size=0.333,random_state=1)
+X_train, data_test, y_train, label_test = train_test_split(X,y,test_size=0.33,random_state=1)
 
 
 # 
@@ -111,6 +119,12 @@ data_train, data_test, label_train, label_test = train_test_split(X,y,test_size=
 #
 # .. your code here ..
 
+from sklearn import preprocessing
+preprocessing.Normalizer().fit(X_train)
+
+
+data_trainT=preprocessing.Normalizer().transform(X_train)
+data_testT=preprocessing.Normalizer().transform(data_test)
 
 
 #
@@ -137,6 +151,13 @@ data_train, data_test, label_train, label_test = train_test_split(X,y,test_size=
 #
 # .. your code here ..
 
+train_pca = doPCA(data_trainT)
+T = train_pca.transform(data_trainT)
+testT=train_pca.transform(data_test)
+#CC = train_pca.transform(centroids)
+
+
+
 
 
 
@@ -148,11 +169,16 @@ data_train, data_test, label_train, label_test = train_test_split(X,y,test_size=
 #
 # .. your code here ..
 
+from sklearn.neighbors import KNeighborsClassifier
+neighbors=3
+
+knn =KNeighborsClassifier(n_neighbors=neighbors)
+knn.fit(T,y_train)
 
 
 
 # HINT: Ensure your KNeighbors classifier object from earlier is called 'knn'
-plotDecisionBoundary(knn, X_train, y_train)
+plotDecisionBoundary(knn, T, y_train)
 
 
 #------------------------------------
@@ -165,7 +191,9 @@ plotDecisionBoundary(knn, X_train, y_train)
 #
 # .. your code here ..
 
-
+a=knn.score(testT,label_test)
+print "K neightbors fit score {0} with {1} neighbors".format(a,neighbors)
+print "K neightbors fit score {0} with {1} neighbors".format(a,neighbors)
 
 #
 # BONUS: Instead of the ordinal conversion, try and get this assignment
