@@ -5,6 +5,8 @@ import scipy.io
 
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import matplotlib
+from sklearn.model_selection import train_test_split
 
 # If you'd like to try this lab with PCA instead of Isomap,
 # as the dimensionality reduction technique:
@@ -89,8 +91,19 @@ def Plot2DBoundary(DTrain, LTrain, DTest, LTest):
   # Plot
   plt.show()  
 
+  
+def doPCA(data, dimensions=2):
+    from sklearn.decomposition import PCA
+    model = PCA(n_components=dimensions)
+    model.fit(data)
+    return model
 
-
+    
+def doISOMap(data, dimensions=2):
+    from sklearn.decomposition import ISOMAP
+    model = ISMAP(n_components=dimensions)
+    model.fit(data)
+    return model
 #
 # TODO: Use the same code from Module4/assignment4.py to load up the
 # face_data.mat in a dataset called "df". Be sure to calculate the
@@ -98,6 +111,15 @@ def Plot2DBoundary(DTrain, LTrain, DTest, LTest):
 # instead of sideways. This was demonstrated in the M4/A4 code:
 #
 # .. your code here ..
+mat = scipy.io.loadmat('Datasets/face_data.mat')
+df = pd.DataFrame(mat['images']).T
+num_images, num_pixels = df.shape
+num_pixels = int(math.sqrt(num_pixels))
+
+# Rotate the pictures, so we don't have to crane our necks:
+for i in range(num_images):
+  df.loc[i,:] = df.loc[i,:].reshape(num_pixels, num_pixels).T.reshape(-1)
+
 
 
 #
@@ -110,6 +132,9 @@ def Plot2DBoundary(DTrain, LTrain, DTest, LTest):
 #
 # .. your code here ..
 
+labels=pd.read_csv("Datasets/face_labels.csv", header=None)
+labelslice=labels[0:]
+#print labelslice
 
 #
 # TODO: Do train_test_split. Use the same code as on the EdX platform in the
@@ -121,6 +146,7 @@ def Plot2DBoundary(DTrain, LTrain, DTest, LTest):
 # rather than as points:
 #
 # .. your code here ..
+data_train, data_test, label_train, label_test = train_test_split(df, labelslice, test_size=0.1, random_state=7)
 
 
 
@@ -145,6 +171,12 @@ if Test_PCA:
   #
   # .. your code here ..
 
+    pcamodel=doPCA(data_train)
+    data_train=pcamodel.transform(data_train)
+    data_test=pcamodel.transform(data_test)
+  
+  
+  
 else:
   # INFO: Isomap is used *before* KNeighbors to simplify your high dimensionality
   # image samples down to just 2 components! A lot of information has been is
@@ -167,6 +199,9 @@ else:
   #
   # .. your code here ..
 
+    pcamodel=doPCA(data_train)
+    data_train=pcamodel.transform(data_train)
+    data_test=pcamodel.transform(data_test)
 
 
 
@@ -179,12 +214,24 @@ else:
 #
 # .. your code here ..
 
+
+from sklearn.neighbors import KNeighborsClassifier
+neighbors=8
+
+model =KNeighborsClassifier(n_neighbors=neighbors)
+model.fit(data_train,label_train)
+
+
+
 # NOTE: K-NEIGHBORS DOES NOT CARE WHAT THE ANSWERS SHOULD BE! In fact, it
 # just tosses that information away. All KNeighbors cares about storing is
 # your training data (data_train) so that later on when you attempt to
 # predict or score samples, it can derive a class for them based on the
 # labeling of the sample's near neighbors.
 
+a=model.score(data_test,label_test)
+print "K neightbors fit score {0} with {1} neighbors".format(a,neighbors)
+print "K neightbors fit score {0} with {1} neighbors".format(a,neighbors)
 
 #
 # TODO: Calculate + Print the accuracy of the testing set (data_test and

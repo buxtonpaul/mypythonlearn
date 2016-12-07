@@ -59,7 +59,7 @@ def plotDecisionBoundary(model, X, y):
 #
 # .. your code here ..
 
-
+df=pd.read_csv("Datasets/breast-cancer-wisconsin.data",names=['sample', 'thickness', 'size', 'shape', 'adhesion', 'epithelial', 'nuclei', 'chromatin', 'nucleoli', 'mitoses', 'status'],na_values="?")
 
 # 
 # TODO: Copy out the status column into a slice, then drop it from the main
@@ -68,6 +68,8 @@ def plotDecisionBoundary(model, X, y):
 #
 # .. your code here ..
 
+status=df.status()
+df=df.drop(labels="status",axis=1)
 
 
 #
@@ -75,8 +77,8 @@ def plotDecisionBoundary(model, X, y):
 # with the mean feature / column value
 #
 # .. your code here ..
-
-
+description=df.describe()
+df.fillna(description.ix['mean',:],axis=0,inplace=True)
 
 #
 # TODO: Do train_test_split. Use the same variable names as on the EdX platform in
