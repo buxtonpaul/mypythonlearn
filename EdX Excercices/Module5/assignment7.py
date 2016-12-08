@@ -1,6 +1,20 @@
 # If you'd like to try this lab with PCA instead of Isomap,
 # as the dimensionality reduction technique:
-Test_PCA = True
+Test_PCA = False
+
+
+def doPCA(data, dimensions=2):
+    from sklearn.decomposition import PCA
+    model = PCA(n_components=dimensions)
+    model.fit(data)
+    return model
+
+    
+def doISOMap(data, dimensions=2):
+    from sklearn import manifold
+    model = manifold.Isomap(n_components=dimensions)
+    model.fit(data)
+    return model
 
 
 def plotDecisionBoundary(model, X, y):
@@ -68,8 +82,8 @@ df=pd.read_csv("Datasets/breast-cancer-wisconsin.data",names=['sample', 'thickne
 #
 # .. your code here ..
 
-status=df.status()
-df=df.drop(labels="status",axis=1)
+status=df.status
+df=df.drop(labels=["status","sample"],axis=1)
 
 
 #
@@ -87,8 +101,9 @@ df.fillna(description.ix['mean',:],axis=0,inplace=True)
 #
 # .. your code here ..
 
+from sklearn.model_selection import train_test_split
 
-
+data_train, data_test, label_train, label_test = train_test_split(df, status, test_size=0.5, random_state=7)
 
 #
 # TODO: Experiment with the basic SKLearn preprocessing scalers. We know that
@@ -97,6 +112,23 @@ df.fillna(description.ix['mean',:],axis=0,inplace=True)
 # of the dataset, post transformation.
 #
 # .. your code here ..
+
+print df.describe()
+
+from sklearn import preprocessing
+
+
+preprocessing.Normalizer().fit(data_train)
+T=pd.DataFrame(preprocessing.Normalizer().transform(data_train),columns=data_train.columns)
+data_testT=pd.DataFrame(preprocessing.Normalizer().transform(data_test),columns=data_test.columns)
+
+print T.describe()
+
+#T = preprocessing.MinMaxScaler().fit_transform(df)
+#T = preprocessing.MaxAbsScaler().fit_transform(df)
+#T = preprocessing.Normalizer().fit_transform(df)
+
+#T = df # No Change
 
 
 
@@ -112,7 +144,17 @@ if Test_PCA:
   #
   # .. your code here ..
 
-  
+  model=doPCA(T,2)
+
+#Plot3D(df, "3d plot of dataframe", 0, 1,2, num_to_plot=40)
+
+#
+# TODO: Implement Isomap here. Reduce the dataframe df down
+# to THREE components. Once you've done that, call Plot2D using
+# the first two components.
+#
+# .. your code here ..
+
 
 else:
   print "Computing 2D Isomap Manifold"
@@ -123,9 +165,10 @@ else:
   #
   # .. your code here ..
   
+  model=doISOMap(T,2)
 
-
-
+  
+  
 #
 # TODO: Train your model against data_train, then transform both
 # data_train and data_test using your model. You can save the results right
@@ -133,7 +176,8 @@ else:
 #
 # .. your code here ..
 
-
+train_transformed=model.transform(T)
+test_transformed=model.transform(data_testT)
 
 # 
 # TODO: Implement and train KNeighborsClassifier on your projected 2D
@@ -145,7 +189,11 @@ else:
 #
 # .. your code here ..
 
+from sklearn.neighbors import KNeighborsClassifier
+neighbors=15
 
+knmodel =KNeighborsClassifier(n_neighbors=neighbors)
+knmodel.fit(train_transformed,label_train)
 
 #
 # INFO: Be sure to always keep the domain of the problem in mind! It's
@@ -158,6 +206,8 @@ else:
 # samples from the training set.
 
 
+a=knmodel.score(test_transformed,label_test)
+print "K neightbors fit score {0} with {1} neighbors".format(a,neighbors)
 
 #
 # TODO: Calculate + Print the accuracy of the testing set
@@ -165,4 +215,4 @@ else:
 # .. your code here ..
 
 
-plotDecisionBoundary(knmodel, X_test, y_test)
+plotDecisionBoundary(knmodel, test_transformed, label_test)
