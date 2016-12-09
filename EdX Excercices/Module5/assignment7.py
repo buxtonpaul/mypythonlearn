@@ -1,7 +1,7 @@
 # If you'd like to try this lab with PCA instead of Isomap,
 # as the dimensionality reduction technique:
 Test_PCA = False
-
+import pandas as pd
 
 def doPCA(data, dimensions=2):
     from sklearn.decomposition import PCA
