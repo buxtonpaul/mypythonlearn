@@ -1,6 +1,6 @@
 # If you'd like to try this lab with PCA instead of Isomap,
 # as the dimensionality reduction technique:
-Test_PCA = False
+Test_PCA = True
 import pandas as pd
 
 def doPCA(data, dimensions=2):
@@ -117,10 +117,17 @@ print df.describe()
 
 from sklearn import preprocessing
 
+#prepro=preprocessing.Normalizer()
+#prepro=preprocessing.MinMaxScaler()
+#prepro=preprocessing.RobustScaler()
+#prepro=preprocessing.MaxAbsScaler()
+#prepro=preprocessing.StandardScaler()
 
-preprocessing.Normalizer().fit(data_train)
-T=pd.DataFrame(preprocessing.Normalizer().transform(data_train),columns=data_train.columns)
-data_testT=pd.DataFrame(preprocessing.Normalizer().transform(data_test),columns=data_test.columns)
+#prepro.fit(data_train)
+#T=pd.DataFrame(prepro.transform(data_train),columns=data_train.columns)
+#data_testT=pd.DataFrame(prepro.transform(data_test),columns=data_test.columns)
+T=data_train
+data_testT=data_test
 
 print T.describe()
 
@@ -146,7 +153,6 @@ if Test_PCA:
 
   model=doPCA(T,2)
 
-#Plot3D(df, "3d plot of dataframe", 0, 1,2, num_to_plot=40)
 
 #
 # TODO: Implement Isomap here. Reduce the dataframe df down
@@ -192,6 +198,10 @@ test_transformed=model.transform(data_testT)
 from sklearn.neighbors import KNeighborsClassifier
 neighbors=15
 
+
+# as malignant (4) is more important than benign, lets use the labels as weights
+
+#knmodel =KNeighborsClassifier(n_neighbors=neighbors,weights="distance")
 knmodel =KNeighborsClassifier(n_neighbors=neighbors)
 knmodel.fit(train_transformed,label_train)
 
