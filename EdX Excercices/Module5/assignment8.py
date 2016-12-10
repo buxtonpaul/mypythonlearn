@@ -10,7 +10,7 @@ def drawLine(model, X_test, y_test, title):
   # This convenience method will take care of plotting your
   # test observations, comparing them to the regression line,
   # and displaying the R2 coefficient
-  fig = plt.figure()
+  fig = plt.figure(dpi=270)
   ax = fig.add_subplot(111)
   ax.scatter(X_test, y_test, c='g', marker='o')
   ax.plot(X_test, model.predict(X_test), color='orange', linewidth=1, alpha=0.7)
@@ -34,8 +34,7 @@ def drawLine(model, X_test, y_test, title):
 # spread sheet application
 #
 # .. your code here ..
-
-
+X=pd.read_csv("Datasets/life_expectancy.csv",sep='\t')
 #
 # TODO: Create your linear regression model here and store it in a
 # variable called 'model'. Don't actually train or do anything else
@@ -43,7 +42,8 @@ def drawLine(model, X_test, y_test, title):
 #
 # .. your code here ..
 
-
+from sklearn import linear_model
+model=linear_model.LinearRegression()
 
 #
 # TODO: Slice out your data manually (e.g. don't use train_test_split,
@@ -54,9 +54,14 @@ def drawLine(model, X_test, y_test, title):
 # of this document before proceeding.
 #
 # .. your code here ..
+x_Train=X[['Year']][(X.Year<1986)]
+y_Train=X[['WhiteMale']][(X.Year<1986)]
 
 
-
+x_Test=X.Year[(X.Year>=1986)]
+y_Test=X.WhiteMale[(X.Year>=1986)]
+                    
+                    
 #
 # TODO: Train your model then pass it into drawLine with your training
 # set and labels. You can title it "WhiteMale". drawLine will output
@@ -67,14 +72,16 @@ def drawLine(model, X_test, y_test, title):
 #
 # .. your code here ..
 
+model.fit(x_Train,y_Train)
 
+drawLine(model,x_Train,y_Train,"WhiteMale")
 #
 # TODO: Print the actual 2014 WhiteMale life expectancy from your
 # loaded dataset
 #
 # .. your code here ..
-
-
+year=2014
+print "WHite Male life expectancy {0} = {1}".format( year,X.WhiteMale[X.Year==year].values)
 
 # 
 # TODO: Repeat the process, but instead of for WhiteMale, this time
@@ -84,7 +91,25 @@ def drawLine(model, X_test, y_test, title):
 #
 # .. your code here ..
 
+x_Train=X[['Year']][(X.Year<1986)]
+y_Train=X[['BlackFemale']][(X.Year<1986)]
 
+
+x_Test=X.Year[(X.Year>=1986)]
+y_Test=X.BlackFemale[(X.Year>=1986)]
+print "Black Female life expectancy {0} = {1}".format( year,X.WhiteMale[X.Year==year].values)
+drawLine(model,x_Train,y_Train,"BlackFemale")
+                     
+print(X.corr() )
+
+# plot the correlation matrix using IMShow
+plt.imshow(X.corr(), cmap=plt.cm.Blues, interpolation='nearest')
+plt.colorbar()
+tick_marks = [i for i in range(len(X.columns))]
+plt.xticks(tick_marks, X.columns, rotation='vertical')
+plt.yticks(tick_marks, X.columns)
+
+plt.show()
 
 #
 # TODO: Lastly, print out a correlation matrix for your entire
