@@ -68,6 +68,8 @@ def drawPlane(model, X_test, y_test, title, R2):
 #
 # INFO: Let's get started!
 
+X=pd.read_csv("Datasets/College.csv",index_col=0)
+
 
 #
 # TODO: First, as is your habit, inspect your dataset in a text
@@ -104,6 +106,8 @@ X.Private = X.Private.map({'Yes':1, 'No':0})
 #
 # .. your code here ..
 
+from sklearn import linear_model
+model=linear_model.LinearRegression()
 
 
 
@@ -121,6 +125,13 @@ X.Private = X.Private.map({'Yes':1, 'No':0})
 #
 # .. your code here ..
 
+
+from sklearn.model_selection import train_test_split
+
+data_train, X_test, label_train, y_test = train_test_split(X[['Room.Board']],X[['Accept']],test_size=0.4, random_state=7)
+model.fit(data_train,label_train)
+score=model.score(X_test,y_test)
+
 #
 # TODO: Fit and score your model appropriately. Store the score in the
 # score variable.
@@ -128,6 +139,8 @@ X.Private = X.Private.map({'Yes':1, 'No':0})
 # .. your code here ..
 
 # INFO: We'll take it from here, buddy:
+    
+
 drawLine(model, X_test, y_test, "Accept(Room&Board)", score)
 
 
@@ -139,6 +152,12 @@ drawLine(model, X_test, y_test, "Accept(Room&Board)", score)
 # per college.
 #
 # .. your code here ..
+
+data_train, X_test, label_train, y_test = train_test_split(X[['Enroll']],X[['Accept']],test_size=0.4, random_state=7)
+model.fit(data_train,label_train)
+score=model.score(X_test,y_test)
+
+
 drawLine(model, X_test, y_test, "Accept(Enroll)", score)
 
 
@@ -149,6 +168,10 @@ drawLine(model, X_test, y_test, "Accept(Enroll)", score)
 # students per college.
 #
 # .. your code here ..
+data_train, X_test, label_train, y_test = train_test_split(X[['F.Undergrad']],X[['Accept']],test_size=0.4, random_state=7)
+model.fit(data_train,label_train)
+score=model.score(X_test,y_test)
+
 drawLine(model, X_test, y_test, "Accept(F.Undergrad)", score)
 
 
@@ -165,6 +188,12 @@ drawLine(model, X_test, y_test, "Accept(F.Undergrad)", score)
 # inputs. Your training labels will remain a single slice.
 #
 # .. your code here ..
+data_train, X_test, label_train, y_test = train_test_split(X[['Enroll','Room.Board']],X[['Accept']],test_size=0.4, random_state=7)
+model.fit(data_train,label_train)
+score=model.score(X_test,y_test)
+
+
+
 drawPlane(model, X_test, y_test, "Accept(Room&Board,Enroll)", score)
 
 
