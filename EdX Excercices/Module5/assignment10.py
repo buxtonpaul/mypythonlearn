@@ -52,7 +52,10 @@ Provided_Portion = 0.25
 #
 # .. your code here ..
 
-
+zero=[]
+for filename in glob.glob("recordings/0_jackson*.wav"):
+    sample_rate , data = wavfile.read(filename)
+    zero.append(data)
 
 # 
 # TODO: Just for a second, convert zero into a DataFrame. When you do
@@ -70,6 +73,10 @@ Provided_Portion = 0.25
 #
 # .. your code here ..
 
+zerodf=pd.DataFrame(zero,dtype=np.int16)
+
+zerodf=zerodf.dropna(axis=1)
+zero=zerodf.values
 
 #
 # TODO: It's important to know how (many audio_samples samples) long the
@@ -79,7 +86,8 @@ Provided_Portion = 0.25
 #
 # .. your code here ..
 
-
+#n_audio_samples=zerodf.columns.size
+n_audio_samples=zero.shape[1]
 
 #
 # TODO: Create your linear regression model here and store it in a
@@ -88,6 +96,8 @@ Provided_Portion = 0.25
 #
 # .. your code here ..
 
+from sklearn import linear_model
+model=linear_model.LinearRegression()
 
 
 #
@@ -113,6 +123,7 @@ train = np.delete(zero, [random_idx], axis=0)
 #
 # .. your code here ..
 
+print ("train = {0} format = {1}".format(train.shape,test.shape))
 
 
 #
@@ -142,6 +153,7 @@ wavfile.write('Original Test Clip.wav', sample_rate, test)
 # n_audio_samples audio features from test and store it in X_test.
 #
 # .. your code here ..
+X_test  = test[:Provided_Portion*n_audio_samples]
 
 
 #
@@ -152,6 +164,7 @@ wavfile.write('Original Test Clip.wav', sample_rate, test)
 # in completing the sound file.
 #
 # .. your code here ..
+y_test = test[Provided_Portion*n_audio_samples:]
 
 
 
@@ -168,6 +181,9 @@ wavfile.write('Original Test Clip.wav', sample_rate, test)
 #
 # .. your code here ..
 
+#todo something funny going on here
+X_train=train[:][:Provided_Portion*n_audio_samples]
+y_train=train[:][Provided_Portion*n_audio_samples:]
 
 
 # 
@@ -183,6 +199,8 @@ wavfile.write('Original Test Clip.wav', sample_rate, test)
 # [n_samples] into [n_samples, 1]:
 #
 # .. your code here ..
+X_test=X_test.reshape(1,-1)
+#y_test=y_test.reshape(1,-1)
 
 
 #
@@ -190,13 +208,13 @@ wavfile.write('Original Test Clip.wav', sample_rate, test)
 #
 # .. your code here ..
 
-
+model.fit(X_train,y_train)
 # 
 # TODO: Use your model to predict the 'label' of X_test. Store the
 # resulting prediction in a variable called y_test_prediction
 #
 # .. your code here ..
-
+y_test_predition=model.predict(X_test)
 
 # INFO: SciKit-Learn will use float64 to generate your predictions
 # so let's take those values back to int16:
@@ -209,7 +227,7 @@ y_test_prediction = y_test_prediction.astype(dtype=np.int16)
 # by passing in your test data and test label (y_test).
 #
 # .. your code here ..
-print "Extrapolation R^2 Score: ", score
+print "Extrapolation R^2 Score: ", model.score(X_test,y_test)
 
 
 #
