@@ -1,6 +1,10 @@
 # If you'd like to try this lab with PCA instead of Isomap,
 # as the dimensionality reduction technique:
+<<<<<<< HEAD
 Test_PCA = True
+=======
+Test_PCA = False
+>>>>>>> 7953f3eedaf804fc67fe93c9e04c6b20a0942e7d
 import pandas as pd
 
 def doPCA(data, dimensions=2):
