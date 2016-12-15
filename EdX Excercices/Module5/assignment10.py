@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 import scipy.io.wavfile as wavfile
+import glob
 
 # Good Luck!
 
@@ -153,7 +154,7 @@ wavfile.write('Original Test Clip.wav', sample_rate, test)
 # n_audio_samples audio features from test and store it in X_test.
 #
 # .. your code here ..
-X_test  = test[:Provided_Portion*n_audio_samples]
+X_test  = test[:int(Provided_Portion*n_audio_samples)]
 
 
 #
@@ -164,7 +165,7 @@ X_test  = test[:Provided_Portion*n_audio_samples]
 # in completing the sound file.
 #
 # .. your code here ..
-y_test = test[Provided_Portion*n_audio_samples:]
+y_test = test[int(Provided_Portion*n_audio_samples):]
 
 
 
@@ -182,8 +183,9 @@ y_test = test[Provided_Portion*n_audio_samples:]
 # .. your code here ..
 
 #todo something funny going on here
-X_train=train[:][:Provided_Portion*n_audio_samples]
-y_train=train[:][Provided_Portion*n_audio_samples:]
+# these are numpy arrays, index lile np [columns,rows]
+X_train=train[:,:int(Provided_Portion*n_audio_samples)]
+y_train=train[:,int(Provided_Portion*n_audio_samples):]
 
 
 # 
@@ -200,7 +202,7 @@ y_train=train[:][Provided_Portion*n_audio_samples:]
 #
 # .. your code here ..
 X_test=X_test.reshape(1,-1)
-#y_test=y_test.reshape(1,-1)
+y_test=y_test.reshape(1,-1)
 
 
 #
@@ -214,7 +216,7 @@ model.fit(X_train,y_train)
 # resulting prediction in a variable called y_test_prediction
 #
 # .. your code here ..
-y_test_predition=model.predict(X_test)
+y_test_prediction=model.predict(X_test)
 
 # INFO: SciKit-Learn will use float64 to generate your predictions
 # so let's take those values back to int16:
