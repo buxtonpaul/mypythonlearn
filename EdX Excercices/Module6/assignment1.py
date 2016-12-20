@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np 
 import time
-
+from sklearn.model_selection import train_test_split
 
 # 
 # INFO: Your Parameters.
 # You can adjust them after completing the lab
 C = 1
 kernel = 'linear'
-iterations = 5000   # TODO: Change to 200000 once you get to Question#2
+iterations = 200000   # TODO: Change to 200000 once you get to Question#2
 
 #
 # INFO: You can set this to false if you want to
@@ -31,7 +31,7 @@ def drawPlots(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
   padding = 3
   resolution = 0.5
   max_2d_score = 0
-
+  score=0
   y_colors = ['#ff0000', '#00ff00', '#0000ff']
   my_cmap = mpl.colors.ListedColormap(['#ffaaaa', '#aaffaa', '#aaaaff'])
   colors = [y_colors[i] for i in y_train]
@@ -95,21 +95,15 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
   print '\n\n' + wintitle + ' Results'
   s = time.time()
   for i in range(iterations):
-    #
-    # TODO: train the classifier on the training data / labels:
-    #
-    # .. your code here ..
+    model.fit(X_train,y_train)
   print "{0} Iterations Training Time: ".format(iterations), time.time() - s
 
 
   s = time.time()
   for i in range(iterations):
-    #
-    # TODO: score the classifier on the testing data / labels:
-    #
-    # .. your code here ..
+    lastresult=model.score(X_test,y_test)
   print "{0} Iterations Scoring Time: ".format(iterations), time.time() - s
-  print "High-Dimensionality Score: ", round((score*100), 3)
+  print "High-Dimensionality Score: ", round((lastresult*100), 3)
 
 
 
@@ -119,7 +113,7 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
 # Indices shouldn't be doubled, nor weird headers...
 #
 # .. your code here ..
-
+X=pd.read_csv("Datasets/wheat.data")
 
 # INFO: An easy way to show which rows have nans in them
 #print X[pd.isnull(X).any(axis=1)]
@@ -129,8 +123,7 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
 # TODO: Go ahead and drop any row with a nan
 #
 # .. your code here ..
-
-
+X=X.dropna(axis=0).reset_index()
 
 # 
 # INFO: # In the future, you might try setting the nan values to the
@@ -138,7 +131,7 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
 # the specific class rather than across all classes, now that you
 # have the labels
 
-
+y=X.wheat_type
 
 #
 # TODO: Copy the labels out of the dset into variable 'y' then Remove
@@ -147,6 +140,10 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
 #
 # .. your code here ..
 
+X=X.drop(['wheat_type','index','id'],axis=1)
+
+wheats=y.unique().tolist()
+y=[wheats.index(a) for a in y]
 
 
 # 
@@ -155,14 +152,18 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
 # Use variable names: X_train, X_test, y_train, y_test
 #
 # .. your code here ..
-
-
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.30,random_state=7)
 
 #
 # TODO: Create an SVC classifier named svc
 # Use a linear kernel, and set the C value to C
 #
 # .. your code here ..
+
+
+from sklearn.svm import SVC
+svc = SVC(kernel='linear',C=C)
+
 
 
 #
@@ -172,6 +173,10 @@ def benchmark(model, X_train, X_test, y_train, y_test, wintitle='Figure 1'):
 # .. your code here ..
 
 
+from sklearn.neighbors import KNeighborsClassifier
+neighbors=5
+
+knn =KNeighborsClassifier(n_neighbors=neighbors)
 
 
 
