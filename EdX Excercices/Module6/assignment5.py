@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 
 #https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.names
 
@@ -15,14 +15,6 @@ import pandas as pd
 
 # INFO: An easy way to show which rows have nans in them
 #print X[pd.isnull(X).any(axis=1)]
-X=pd.read_csv("Datasets/agaricus-lepiota.data",na_values='?')
-X=X.dropna(axis=0)
-
-# 
-# TODO: Go ahead and drop any row with a nan
-#
-# .. your code here ..
-print X.shape
 columns = ["classification","cap-shape",                                 
     "cap-surface",             
     "cap-color",                          
@@ -46,6 +38,15 @@ columns = ["classification","cap-shape",
     "population",              
     "habitat"]
 
+X=pd.read_csv("Datasets/agaricus-lepiota.data",na_values='?',names=columns)
+X=X.dropna(axis=0)
+
+# 
+# TODO: Go ahead and drop any row with a nan
+#
+# .. your code here ..
+print X.shape
+
 #
 # TODO: Copy the labels out of the dset into variable 'y' then Remove
 # them from X. Encode the labels, using the .map() trick we showed
@@ -53,6 +54,9 @@ columns = ["classification","cap-shape",
 #
 # .. your code here ..
 
+y=X.classification
+
+X=X.drop("classification",axis=1)
 
 #
 # TODO: Encode the entire dataset using dummies
