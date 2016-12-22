@@ -81,7 +81,7 @@ def drawPredictions(X_train, X_test, y_train, y_test):
 
 #
 # TODO: Pass in the file paths to the .tes and the .tra files
-X_train, X_test, y_train, y_test = load('', '')
+X_train, X_test, y_train, y_test = load('Datasets/optdigits.tes', 'Datasets/optdigits.tra')
 
 import matplotlib.pyplot as plt
 from sklearn import svm
@@ -101,13 +101,15 @@ print "Training SVC Classifier..."
 #
 # .. your code here ..
 
-
-
+from sklearn.svm import SVC
+model = SVC(kernel='rbf',C=1,gamma=0.001)
+model.fit(X_train,y_train)
 
 # TODO: Calculate the score of your SVC against the testing data
 print "Scoring SVC Classifier..."
 #
 # .. your code here ..
+score=model.score(X_test,y_test)
 print "Score:\n", score
 
 
@@ -120,7 +122,8 @@ drawPredictions(X_train, X_test, y_train, y_test)
 # By TRUE value, we mean, the actual provided label for that sample
 #
 # .. your code here ..
-print "1000th test label: ", true_1000th_test_value)
+true_1000th_test_value=y_test[999]
+print "1000th test label: ", true_1000th_test_value
 
 
 #
@@ -130,6 +133,7 @@ print "1000th test label: ", true_1000th_test_value)
 # notes from the previous module's labs.
 #
 # .. your code here ..
+guess_1000th_test_value=model.predict(X_test.ix[999,:].reshape(1,-1))
 print "1000th test prediction: ", guess_1000th_test_value
 
 
@@ -139,6 +143,9 @@ print "1000th test prediction: ", guess_1000th_test_value
 #
 # .. your code here ..
 
+fig = plt.figure()
+plt.imshow(X_test.ix[999,:].reshape(8,8), cmap=plt.cm.gray_r, interpolation='nearest')
+plt.show()
 
 #
 # TODO: Were you able to beat the USPS advertised accuracy score
