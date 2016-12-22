@@ -15,14 +15,36 @@ import pandas as pd
 
 # INFO: An easy way to show which rows have nans in them
 #print X[pd.isnull(X).any(axis=1)]
-
+X=pd.read_csv("Datasets/agaricus-lepiota.data",na_values='?')
+X=X.dropna(axis=0)
 
 # 
 # TODO: Go ahead and drop any row with a nan
 #
 # .. your code here ..
 print X.shape
-
+columns = ["classification","cap-shape",                                 
+    "cap-surface",             
+    "cap-color",                          
+    "bruises?",                
+    "odor",                    
+    "gill-attachment",         
+    "gill-spacing",            
+    "gill-size",               
+    "gill-color",              
+    "stalk-shape",             
+    "stalk-root",              
+    "stalk-surface-above-ring",
+    "stalk-surface-below-ring",
+    "stalk-color-above-ring",  
+    "stalk-color-below-ring", 
+    "veil-type",               
+    "veil-color",              
+    "ring-number",             
+    "ring-type",
+    "spore-print-color",
+    "population",              
+    "habitat"]
 
 #
 # TODO: Copy the labels out of the dset into variable 'y' then Remove
@@ -58,7 +80,7 @@ print X.shape
 # TODO: score the classifier on the testing data / labels:
 #
 # .. your code here ..
-print "High-Dimensionality Score: ", round((score*100), 3)
+#print "High-Dimensionality Score: ", round((score*100), 3)
 
 
 #
