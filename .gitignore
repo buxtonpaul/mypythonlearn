@@ -28,6 +28,8 @@
 *.sql
 *.sqlite
 *.ipynb_checkpoints
+settings.json
+.browse.VC.db
 
 # IDE generated files #
 #######################
