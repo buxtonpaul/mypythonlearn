@@ -1,0 +1,11 @@
+bridge1:
+    bridgetype: mifi6
+    bridgeip: fake
+    rgbw:
+        bedroom : 1
+        hall : 1
+        landing : 1
+    white:
+        spareroom : 1
+    bridge:
+        nightlight : 0
